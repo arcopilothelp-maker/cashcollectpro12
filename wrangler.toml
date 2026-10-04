@@ -1,0 +1,53 @@
+name = "cashcollectpro12"
+main = "src/index.js"
+compatibility_date = "2025-09-01"
+
+# Your domain (must be in the same Cloudflare account). Cloudflare creates the DNS records and HTTPS certificate.
+routes = [
+  { pattern = "cashcollectpro.com", custom_domain = true },
+  { pattern = "www.cashcollectpro.com", custom_domain = true },
+]
+
+[assets]
+directory = "./public"
+binding = "ASSETS"
+run_worker_first = true
+
+[observability]
+enabled = true
+
+
+[vars]
+# ---- Public / non-secret settings (safe to keep in this file) ----
+SUPABASE_URL        = "https://YOUR-PROJECT.supabase.co"
+SUPABASE_ANON_KEY   = "YOUR-SUPABASE-ANON-OR-PUBLISHABLE-KEY"
+TURNSTILE_SITE_KEY  = "YOUR-TURNSTILE-SITE-KEY"
+RAZORPAY_KEY_ID     = "rzp_test_XXXXXXXX"
+ADMIN_EMAILS        = "sudiptobabu007@gmail.com"
+
+# AI models – check exact model IDs at https://platform.claude.com/docs/en/about-claude/models
+MODEL_FAST  = "claude-haiku-4-5"
+MODEL_SMART = "claude-sonnet-5-5"
+
+# Prices in USD per million tokens – check https://platform.claude.com/docs/en/about-claude/pricing
+PRICE_FAST_IN   = "1"
+PRICE_FAST_OUT  = "5"
+PRICE_SMART_IN  = "2"
+PRICE_SMART_OUT = "10"
+USD_INR         = "90"     # keep slightly above the real rate as a safety buffer
+
+# Margin protection
+CREDIT_VALUE_PAISE = "430" # LOWEST net value per credit: ₹9,999/1,900 credits, minus 18% GST and ~2% fee ≈ ₹4.37
+MIN_MARGIN         = "5"   # worst-case AI cost must be ≤ 1/5 (20%) of credit value => at least 80% gross profit
+
+# ---- SECRETS: never put these in this file. Set them with: ----
+# npx wrangler secret put SUPABASE_SERVICE_ROLE_KEY
+# npx wrangler secret put ANTHROPIC_API_KEY
+# npx wrangler secret put RAZORPAY_KEY_SECRET
+# npx wrangler secret put RAZORPAY_WEBHOOK_SECRET
+# npx wrangler secret put TURNSTILE_SECRET_KEY
+# npx wrangler secret put HASH_PEPPER          (any long random string)
+# Optional:
+# npx wrangler secret put ALERT_WEBHOOK_URL    (Slack/Teams/Google Chat webhook)
+# npx wrangler secret put TWILIO_ACCOUNT_SID   (blocks virtual numbers)
+# npx wrangler secret put TWILIO_AUTH_TOKEN

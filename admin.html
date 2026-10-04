@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Owner Dashboard – CashCollect Pro</title>
+<link rel="stylesheet" href="/styles.css">
+<script src="/vendor/supabase-2.117.2.js" defer></script>
+<script src="/admin.js" defer></script>
+</head>
+<body class="adm-body">
+<header class="nav">
+  <div class="wrap nav-row">
+    <a class="logo" href="/"><svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0b1f3a"/><path d="M21.5 11.2a7 7 0 1 0 0 9.6" fill="none" stroke="#d6b26e" stroke-width="3.2" stroke-linecap="round"/><circle cx="22.6" cy="16" r="2.1" fill="#fff"/></svg><span>CashCollect <b>Pro</b> · Owner</span></a>
+    <a class="btn btn-ghost" href="/">Back to website</a>
+  </div>
+</header>
+<main class="wrap adm">
+  <p id="adminMsg" class="msg info">Loading…</p>
+  <div id="adminBody" class="hidden">
+    <div class="adm-head">
+      <div><p class="eyebrow">OWNER DASHBOARD</p><h1>How your website is doing</h1></div>
+      <div class="seg" id="range">
+        <button data-days="7">7 days</button><button data-days="30" class="active">30 days</button><button data-days="90">90 days</button><button data-days="365">1 year</button>
+      </div>
+    </div>
+
+    <div class="kpis" id="kpis"></div>
+
+    <div class="adm-grid">
+      <div class="card wide">
+        <h3>Visitors per day</h3><p>Unique visitors each day (anonymous count).</p>
+        <div id="chartVisitors"></div>
+      </div>
+      <div class="card wide">
+        <h3>Sales per day</h3><p>Revenue received each day (₹).</p>
+        <div id="chartRevenue"></div>
+        <details class="paste" style="margin-top:12px"><summary>Show daily numbers as a table</summary><div id="dailyTable"></div></details>
+      </div>
+
+      <div class="card"><h3>What people bought</h3><p>Paid orders by pack.</p><div id="salesByPack"></div></div>
+      <div class="card"><h3>Recent purchases</h3><p>Last 15 payments. Use this to support customers.</p><div id="recentPayments"></div></div>
+
+      <div class="card"><h3>What people ask the AI about</h3><p>Topic of each answered question (question text is never stored).</p><div id="arTopics"></div></div>
+      <div class="card"><h3>Paid features used</h3><p>Answered requests by type.</p><div id="usageByMode"></div></div>
+
+      <div class="card"><h3>What visitors read</h3><p>Sections viewed for at least 1.5 seconds.</p><div id="sections"></div></div>
+      <div class="card"><h3>What visitors click</h3><p>Buttons and contact links.</p><div id="ctas"></div></div>
+
+      <div class="card"><h3>What help people look for</h3><p>Clicks on the “How I help” needs.</p><div id="needs"></div></div>
+      <div class="card"><h3>Free insights opened</h3><p>Which playbook cards people read.</p><div id="insights"></div></div>
+
+      <div class="card"><h3>Quiz topics played</h3><p>Rounds started (and completed).</p><div id="quiz"></div></div>
+      <div class="card"><h3>Where visitors come from</h3><p>The website that sent them (or “direct”).</p><div id="referrers"></div></div>
+
+      <div class="card"><h3>Countries</h3><p>From Cloudflare. No IP addresses are stored.</p><div id="countries"></div></div>
+      <div class="card"><h3>Cities &amp; devices</h3><p>Top cities, then mobile vs desktop.</p><div id="cities"></div><div id="devices" style="margin-top:16px"></div></div>
+    </div>
+
+    <div class="adm-grid">
+      <div class="card">
+        <h3>Kill switches</h3><p>Turning free questions off stops ALL free usage instantly. Paying customers are not affected.</p>
+        <div class="row-gap"><button id="toggleFree" class="btn btn-dark"></button><button id="togglePaid" class="btn btn-soft"></button></div>
+        <p class="small muted" id="freeToday" style="margin-top:12px"></p>
+      </div>
+      <div class="card">
+        <h3>Limits</h3><p>Free budget and rate limits.</p>
+        <div class="grid3" id="limits"></div>
+        <button id="saveLimits" class="btn btn-dark" style="margin-top:14px">Save limits</button>
+      </div>
+    </div>
+  </div>
+</main>
+</body>
+</html>

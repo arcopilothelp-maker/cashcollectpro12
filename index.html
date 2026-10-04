@@ -1,0 +1,534 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>CashCollect Pro – Help with receivables, careers and teams | Sudipta Ghosh</title>
+<meta name="description" content="Practical help from Sudipta Ghosh, finance and AR leader with 20+ years of experience: answers to AR and collections questions, career training, resume ATS checks and consulting for businesses.">
+<meta name="theme-color" content="#0b1f3a">
+<link rel="preload" href="/fonts/inter-latin-var.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="/styles.css">
+<script src="/track.js" defer></script>
+<script src="/vendor/supabase-2.117.2.js" defer></script>
+<script src="https://challenges.cloudflare.com/turnstile/v0/api.js?render=explicit" defer></script>
+<script src="https://checkout.razorpay.com/v1/checkout.js" defer></script>
+<script src="/resume.js" defer></script>
+<script src="/quiz.js" defer></script>
+<script src="/app.js" defer></script>
+</head>
+<body>
+
+<!-- ================= HEADER ================= -->
+<header class="nav">
+  <div class="wrap nav-row">
+    <a class="logo" href="/" aria-label="CashCollect Pro home">
+      <svg viewBox="0 0 32 32" width="30" height="30" aria-hidden="true"><rect width="32" height="32" rx="9" fill="#0b1f3a"/><path d="M21.5 11.2a7 7 0 1 0 0 9.6" fill="none" stroke="#d6b26e" stroke-width="3.2" stroke-linecap="round"/><circle cx="22.6" cy="16" r="2.1" fill="#fff"/></svg>
+      <span>CashCollect <b>Pro</b></span>
+    </a>
+    <nav class="links">
+      <a href="#help">How I help</a>
+      <a href="#about">About</a>
+      <a href="#courses">Training</a>
+      <a href="#consulting">Consulting</a>
+      <a href="#insights">Insights</a>
+      <a href="#quiz">Quiz</a>
+      <a href="/pricing.html" data-track="cta:pricing_page">Pricing</a>
+    </nav>
+    <div class="nav-cta">
+      <button id="btnSignIn" class="btn btn-ghost">Sign in</button>
+      <button id="btnSignOut" class="btn btn-ghost hidden">Sign out</button>
+      <a class="btn btn-primary" href="#contact" data-track="cta:nav_talk">Talk to me</a>
+      <details class="menu">
+        <summary aria-label="Menu"><span></span><span></span><span></span></summary>
+        <div class="menu-panel">
+          <a href="#help">How I help</a><a href="#about">About</a><a href="#ats">Resume ATS</a><a href="#ai">AI Assistant</a>
+          <a href="#courses">Training</a><a href="#consulting">Consulting</a><a href="#insights">Insights</a><a href="#quiz">Quiz</a>
+          <a href="/pricing.html">Pricing</a><a href="#contact">Contact</a>
+        </div>
+      </details>
+    </div>
+  </div>
+</header>
+
+<!-- ================= APP (signed in) ================= -->
+<main id="app" class="hidden">
+  <section class="wrap dash">
+    <div class="dash-head">
+      <div>
+        <p class="eyebrow">YOUR WORKSPACE</p>
+        <h2 class="dash-title">Welcome back</h2>
+      </div>
+      <div class="balances">
+        <div class="bal"><span>Free questions</span><b id="freeBal">–</b></div>
+        <div class="bal gold"><span>AR Credits</span><b id="paidBal">–</b></div>
+        <a id="adminLink" class="btn btn-soft hidden" href="/admin.html">Owner dashboard</a>
+      </div>
+    </div>
+
+    <div id="phoneBox" class="card notice hidden">
+      <div>
+        <h3>Verify your mobile to unlock 3 free questions</h3>
+        <p class="muted">One set of free questions per mobile number. We keep only a secure fingerprint of your number.</p>
+      </div>
+      <div class="field-row">
+        <input id="phoneInput" type="tel" placeholder="+91 98765 43210" autocomplete="tel" maxlength="16">
+        <button id="btnSendOtp" class="btn btn-dark">Send OTP</button>
+      </div>
+      <div class="field-row hidden" id="otpRow">
+        <input id="otpInput" inputmode="numeric" placeholder="6-digit OTP" maxlength="6">
+        <button id="btnVerifyOtp" class="btn btn-dark">Verify</button>
+      </div>
+    </div>
+
+    <div id="claimBox" class="card notice hidden">
+      <div><h3 id="claimTitle">Unlock your 3 free questions</h3><p class="muted">Complete the quick security check below. One free set per person.</p></div>
+      <div id="tsClaim" class="ts"></div>
+      <button id="btnClaim" class="btn btn-primary">Unlock my 3 free questions</button>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab active" data-tab="tabAts" role="tab">Resume ATS check</button>
+      <button class="tab" data-tab="tabAsk" role="tab">Ask the AI</button>
+      <button class="tab" data-tab="tabBuy" role="tab">Top up credits</button>
+    </div>
+
+    <!-- ATS -->
+    <div id="tabAts" class="card tabpane">
+      <div class="pane-head">
+        <div>
+          <h3>Resume ATS score report</h3>
+          <p class="muted">Upload your resume. Add the job description for a match score. One report = <b>12 credits</b> (₹99 Resume ATS Pack).</p>
+        </div>
+        <span class="pill">≈ 60 seconds</span>
+      </div>
+      <div class="ats-grid">
+        <div>
+          <label class="drop" for="resumeFile" id="dropZone">
+            <input id="resumeFile" type="file" accept=".pdf,.docx,.txt,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain">
+            <svg viewBox="0 0 24 24" width="30" height="30" aria-hidden="true"><path d="M12 16V4m0 0-4 4m4-4 4 4M5 15v3a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <b>Drop your resume here or click to upload</b>
+            <span class="muted small">PDF, DOCX or TXT · up to 5 MB · read in your browser</span>
+          </label>
+          <p id="resumeInfo" class="small muted"></p>
+          <details class="paste">
+            <summary>Or paste resume text</summary>
+            <textarea id="resumeText" rows="8" maxlength="15000" placeholder="Paste the full text of your resume"></textarea>
+          </details>
+        </div>
+        <div>
+          <label class="lbl" for="jdText">Job description <span class="muted">(optional, recommended)</span></label>
+          <textarea id="jdText" rows="9" maxlength="6000" placeholder="Paste the job description to get a match score and the exact keywords you are missing"></textarea>
+        </div>
+      </div>
+      <div class="pane-foot">
+        <p class="small muted">🔒 Your file stays on your device. We send only the text, hide phone, email, PAN and account numbers first, and never store your resume or report.</p>
+        <button id="btnAts" class="btn btn-primary btn-lg">Get my ATS score · 12 credits</button>
+      </div>
+      <p id="atsMsg" class="msg hidden"></p>
+
+      <div id="atsResult" class="report hidden">
+        <div class="report-top">
+          <div class="ring" id="atsRing"><div><b id="atsOverall">0</b><span>/100</span></div></div>
+          <div class="report-sum">
+            <span class="pill" id="atsBand"></span>
+            <p id="atsSummary"></p>
+            <p class="small muted" id="atsJd"></p>
+          </div>
+        </div>
+        <div class="bars" id="atsAreas"></div>
+        <div class="report-cols">
+          <div><h4>Fix these first</h4><ol class="fixes" id="atsFixes"></ol></div>
+          <div>
+            <h4>What works</h4><ul class="ticks" id="atsStrengths"></ul>
+            <h4>Keywords to add <span class="muted small">(only if you have them)</span></h4><div class="chips" id="atsKeywords"></div>
+          </div>
+        </div>
+        <div class="report-foot">
+          <p class="small muted">Estimated score based on common ATS rules. Real systems differ by employer. Use it as a guide, not a guarantee.</p>
+          <div class="row-gap">
+            <button id="btnAtsPrint" class="btn btn-soft">Save as PDF</button>
+            <a class="btn btn-dark" href="#contact">Get it rewritten 1-to-1</a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASK -->
+    <div id="tabAsk" class="card tabpane hidden">
+      <div class="pane-head">
+        <div><h3>Ask the CashCollect Pro AI Assistant</h3><p class="muted">Overdue customers, disputes, emails, call scripts and AR strategy.</p></div>
+        <div class="field-row"><select id="modeSelect"></select></div>
+      </div>
+      <p class="small muted" id="modeCost"></p>
+      <textarea id="question" maxlength="4000" rows="7" placeholder="Example: Customer is 75 days overdue on ₹4.2 lakh and keeps promising next week. What should I do? (Please leave out names, phone numbers and bank details.)"></textarea>
+      <div class="pane-foot">
+        <span class="small muted"><span id="charCount">0</span>/4000</span>
+        <div id="tsAsk" class="ts"></div>
+        <button id="btnAsk" class="btn btn-primary btn-lg">Ask</button>
+      </div>
+      <p id="msg" class="msg hidden"></p>
+      <div id="answer" class="answer hidden"></div>
+    </div>
+
+    <!-- BUY -->
+    <div id="tabBuy" class="card tabpane hidden">
+      <div class="pane-head">
+        <div><h3>Top up AR Credits</h3><p class="muted">Credits add to your balance. Bigger packs cost less per credit.</p></div>
+        <div class="seg" data-target="packsApp"><button class="active" data-cat="individual">Individual</button><button data-cat="corporate">Corporate</button></div>
+      </div>
+      <div class="packs" id="packsApp"></div>
+      <p class="small muted">Secure payment by Razorpay: UPI, cards, net banking. We never see or store your card or UPI details.</p>
+    </div>
+  </section>
+</main>
+
+
+<!-- ================= LANDING ================= -->
+<main id="landing">
+  <section class="hero">
+    <div class="glow g1"></div><div class="glow g2"></div>
+    <div class="wrap hero-grid">
+      <div>
+        <p class="badge"><span>Sudipta Ghosh</span> Finance &amp; AR leader · Trainer · Consultant</p>
+        <h1>Practical help for<br><em>receivables, careers and teams.</em></h1>
+        <p class="lede">Stuck with an overdue customer? Preparing for your next job? Building a stronger collections team? Get help from someone who has done the work for 20+ years, in the way that suits you: a quick answer, a course, or hands-on consulting.</p>
+        <div class="cta-row">
+          <a class="btn btn-primary btn-lg" href="#help" data-track="cta:hero_help">Find the right help</a>
+          <a class="btn btn-outline btn-lg" href="#contact" data-track="cta:hero_talk">Talk to me</a>
+        </div>
+        <ul class="trust">
+          <li>20+ years in AR</li><li>3 free AI questions</li><li>Your data kept private</li>
+        </ul>
+      </div>
+
+      <div class="picker">
+        <p class="picker-title">What do you need help with today?</p>
+        <a href="#help-ar" data-track="help_need:hero_ar"><span>💬</span><div><b>An AR or collections question</b><small>Overdue customers, disputes, emails, strategy</small></div><i>→</i></a>
+        <a href="#help-job" data-track="help_need:hero_job"><span>🎯</span><div><b>Getting a job or a better role</b><small>Resume, ATS score, interviews, LinkedIn</small></div><i>→</i></a>
+        <a href="#help-skills" data-track="help_need:hero_skills"><span>🎓</span><div><b>Building my skills</b><small>Communication, leadership, workplace skills</small></div><i>→</i></a>
+        <a href="#help-business" data-track="help_need:hero_business"><span>📈</span><div><b>Improving my company's collections</b><small>DSO, overdue, process, team coaching</small></div><i>→</i></a>
+        <a href="#help-team" data-track="help_need:hero_team"><span>👥</span><div><b>Training my team</b><small>Workshops for AR, finance and fresh hires</small></div><i>→</i></a>
+      </div>
+    </div>
+  </section>
+
+  <section class="stats">
+    <div class="wrap stats-row">
+      <div><b>20+</b><span>years in AR, credit &amp; order-to-cash</span></div>
+      <div><b>11</b><span>career-skill training modules</span></div>
+      <div><b>6</b><span>consulting services for businesses</span></div>
+      <div><b>Free</b><span>AR quiz, insights and 3 AI questions</span></div>
+    </div>
+  </section>
+
+  <!-- HOW I HELP -->
+  <section id="help" class="section">
+    <div class="wrap">
+      <div class="head-center">
+        <p class="eyebrow">HOW I CAN HELP</p>
+        <h2>Start with your need, not a product</h2>
+        <p class="lead">Pick what fits your situation. Each one tells you what you get and the easiest way to start.</p>
+      </div>
+      <div class="needs">
+        <article class="need" id="help-ar">
+          <span class="need-ico">💬</span>
+          <h3>“I have an AR or collections problem”</h3>
+          <p>A customer is overdue, a dispute is stuck, or you need the right words for a firm but polite email.</p>
+          <ul class="ticks sm"><li>Instant answer with diagnosis and next steps</li><li>Ready-to-send emails and call scripts</li><li>Free practical insights below</li></ul>
+          <div class="need-cta"><button class="btn btn-dark js-ask" data-track="help_need:ar">Ask 3 questions free</button><a href="#insights" class="link">Read the playbook →</a></div>
+        </article>
+        <article class="need" id="help-job">
+          <span class="need-ico">🎯</span>
+          <h3>“I want a job or a better role”</h3>
+          <p>Your resume isn't getting calls, or you want to walk into the interview prepared and confident.</p>
+          <ul class="ticks sm"><li>Resume ATS score with exact fixes (₹99)</li><li>1-to-1 resume curation and LinkedIn makeover</li><li>Mock interviews with honest feedback</li></ul>
+          <div class="need-cta"><button class="btn btn-dark js-ats" data-track="help_need:job">Check my resume</button><a href="#courses" class="link">Job-Ready course →</a></div>
+        </article>
+        <article class="need" id="help-skills">
+          <span class="need-ico">🎓</span>
+          <h3>“I want to grow my skills”</h3>
+          <p>Speak with confidence, write better emails, handle difficult conversations and step up as a leader.</p>
+          <ul class="ticks sm"><li>Live, practical training in small batches</li><li>Personal feedback on every exercise</li><li>Online or in person</li></ul>
+          <div class="need-cta"><a class="btn btn-dark" href="#courses" data-track="help_need:skills">See the programs</a><a href="#quiz" class="link">Try the free quiz →</a></div>
+        </article>
+        <article class="need" id="help-business">
+          <span class="need-ico">📈</span>
+          <h3>“Our collections need to improve”</h3>
+          <p>DSO is creeping up, overdue keeps growing, disputes take months, or the team is busy but cash isn't coming in.</p>
+          <ul class="ticks sm"><li>AR health check with quick wins</li><li>DSO and overdue reduction drive</li><li>Process, policy and escalation design</li></ul>
+          <div class="need-cta"><a class="btn btn-dark" href="#consulting" data-track="help_need:business">See consulting</a><a href="#contact" class="link" data-track="cta:discovery_call">Free 30-min call →</a></div>
+        </article>
+        <article class="need" id="help-team">
+          <span class="need-ico">👥</span>
+          <h3>“I need to train my team”</h3>
+          <p>New collectors, a growing shared-services team, or fresh hires who need to be workplace-ready fast.</p>
+          <ul class="ticks sm"><li>Custom workshops for AR and finance teams</li><li>Collector conversation and escalation coaching</li><li>Team access to the AI assistant</li></ul>
+          <div class="need-cta"><a class="btn btn-dark" href="#contact" data-track="help_need:team">Plan a workshop</a><a href="/pricing.html" class="link">Team plans →</a></div>
+        </article>
+        <article class="need soft">
+          <span class="need-ico">🤔</span>
+          <h3>“I'm not sure what I need”</h3>
+          <p>Tell me what's going on. I'll point you to the simplest next step, even if it's free.</p>
+          <div class="need-cta"><a class="btn btn-primary" href="https://wa.me/919538924090" target="_blank" rel="noopener" data-track="cta:whatsapp">Message me on WhatsApp</a></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ABOUT -->
+  <section id="about" class="section alt">
+    <div class="wrap about-grid">
+      <div class="about-card">
+        <div class="avatar" aria-hidden="true">SG</div>
+        <h3>Sudipta Ghosh</h3>
+        <p class="muted">Finance &amp; AR leader · Trainer · Consultant</p>
+        <div class="about-facts">
+          <div><b>20+</b><span>years experience</span></div>
+          <div><b>O2C</b><span>end-to-end</span></div>
+        </div>
+        <a class="btn btn-dark" href="https://www.linkedin.com/in/sudipta-ghosh-3759b439/" target="_blank" rel="noopener" data-track="cta:linkedin">View LinkedIn profile</a>
+      </div>
+      <div>
+        <p class="eyebrow">ABOUT ME</p>
+        <h2>Hi, I'm Sudipta.</h2>
+        <p class="lead">I have spent more than 20 years in finance, working across accounts receivable, order-to-cash, credit and collections, shared services and controllership. I have built and led teams, worked with senior business stakeholders, and seen what actually turns overdue balances into cash.</p>
+        <p>Along the way I saw the same thing again and again: tools and processes matter, but results come from people who know how to diagnose a problem and have the right conversation. That is why I train professionals and young graduates, coach collections teams, and built CashCollect Pro to make that experience available to anyone, any time.</p>
+        <div class="expertise">
+          <span>Accounts receivable</span><span>Order-to-cash</span><span>Credit &amp; collections</span><span>Cash application</span><span>Dispute management</span><span>Shared services</span><span>Controllership</span><span>Team leadership</span><span>Training &amp; coaching</span>
+        </div>
+        <div class="how">
+          <div><b>1. Diagnose</b><p>Find the real cause before acting.</p></div>
+          <div><b>2. Plan</b><p>Clear owners, dates and next steps.</p></div>
+          <div><b>3. Coach</b><p>Build the skills, not dependence.</p></div>
+          <div><b>4. Measure</b><p>Track what changes, and adjust.</p></div>
+        </div>
+        <blockquote>“Automate the process. Humanise the relationship.”</blockquote>
+      </div>
+    </div>
+  </section>
+
+  <!-- ATS -->
+  <section id="ats" class="section">
+    <div class="wrap split">
+      <div>
+        <p class="eyebrow">FOR JOB SEEKERS · RESUME ATS SCORE</p>
+        <h2>Will your resume get past the ATS?</h2>
+        <p class="lead">Most companies filter resumes with software before a recruiter reads them. Upload yours and see what to fix, in about a minute.</p>
+        <ul class="ticks big">
+          <li><b>Score out of 100</b> across format, contact, keywords, impact, structure and language</li>
+          <li><b>Job match</b> and missing keywords when you paste the job description</li>
+          <li><b>Priority fixes</b> with rewritten example lines</li>
+          <li><b>Private:</b> read in your browser, contact details hidden, nothing stored</li>
+        </ul>
+        <div class="row-gap" style="margin-top:22px">
+          <button class="btn btn-primary btn-lg js-ats" data-track="cta:ats_section">Check my resume · ₹99</button>
+          <a class="link" href="#contact" data-track="cta:resume_curation">Prefer 1-to-1 resume curation? →</a>
+        </div>
+      </div>
+      <div class="mock" aria-hidden="true">
+        <div class="mock-top"><span class="dot"></span><span class="dot"></span><span class="dot"></span><em>Resume ATS report · sample</em></div>
+        <div class="mock-body">
+          <div class="ring ring-sm" data-score="78"><div><b>78</b><span>/100</span></div></div>
+          <div class="mock-bars">
+            <div class="mb"><span>Format &amp; parseability</span><i data-w="83"></i></div>
+            <div class="mb"><span>Keywords &amp; skills</span><i data-w="64"></i></div>
+            <div class="mb"><span>Impact &amp; achievements</span><i data-w="70"></i></div>
+            <div class="mb"><span>Contact &amp; profile</span><i data-w="90"></i></div>
+          </div>
+        </div>
+        <div class="mock-fix"><b>Top fix</b> Replace “Responsible for collections” with “Cut DSO from 62 to 48 days across 300 accounts”.</div>
+        <div class="mock-chips"><span>Cash application</span><span>SAP FI-AR</span><span>DSO</span><span>Dispute management</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- AI -->
+  <section id="ai" class="section alt">
+    <div class="wrap">
+      <div class="head-center">
+        <p class="eyebrow">FOR AR PROFESSIONALS · AI ASSISTANT</p>
+        <h2>Your collections questions, answered 24×7</h2>
+        <p class="lead">Built on my diagnosis framework: invoice accuracy, customer intent, operational readiness, disputes and payment execution.</p>
+      </div>
+      <div class="bento">
+        <div class="tile big dark">
+          <p class="eyebrow light">ASK ANYTHING</p>
+          <h3>“Customer is 75 days overdue and keeps promising next week. What now?”</h3>
+          <p>Get a diagnosis, the next three actions, an escalation path and a ready-to-send email or call script.</p>
+          <button class="btn btn-primary js-ask" data-track="cta:ai_try">Try 3 questions free</button>
+        </div>
+        <div class="tile"><span class="ico">✉️</span><b>Customer emails</b><p>Firm, polite reminders and escalations in your tone.</p></div>
+        <div class="tile"><span class="ico">📞</span><b>Call scripts</b><p>Openers, objection handling and promise-to-pay close.</p></div>
+        <div class="tile"><span class="ico">📊</span><b>Strategy &amp; metrics</b><p>DSO, CEI, ageing and portfolio prioritisation plans.</p></div>
+        <div class="tile"><span class="ico">🛡️</span><b>Privacy built in</b><p>Phone, email, PAN, GSTIN and account numbers are masked automatically.</p></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COURSES -->
+  <section id="courses" class="section">
+    <div class="wrap">
+      <div class="head-center">
+        <p class="eyebrow">TRAINING &amp; CAREER PROGRAMS</p>
+        <h2>Career Readiness &amp; Professional Skills Program</h2>
+        <p class="lead">11 practical modules · 60 hours · live online or in person · small batches with personal feedback</p>
+      </div>
+      <div class="courses">
+        <div class="course"><span class="tag">30 hrs</span><h3>Job-Ready Fast Track</h3><p>Email etiquette, workplace professionalism, Google Sheets &amp; Drive, resume &amp; LinkedIn, interviews, job search.</p><small>For candidates applying now</small></div>
+        <div class="course"><span class="tag">31 hrs</span><h3>Professional Edge</h3><p>Communication, presentations, email writing, assertiveness, difficult conversations, professionalism.</p><small>For working professionals</small></div>
+        <div class="course"><span class="tag">24 hrs</span><h3>Leadership Track</h3><p>Communication &amp; perception, assertiveness, high-stakes conversations, leading effective teams.</p><small>For new and aspiring team leads</small></div>
+        <div class="course featured"><span class="tag gold">60 hrs · Complete</span><h3>Career Accelerator</h3><p>All 11 modules plus 2 mock interviews, resume curation with ATS scoring, and LinkedIn optimisation.</p><small>The full transformation</small></div>
+      </div>
+      <div class="chips center">
+        <span>Business Communication</span><span>Presentation Skills</span><span>Email Etiquette</span><span>Assertiveness &amp; Confidence</span><span>Difficult Conversations</span><span>Leadership &amp; Teams</span><span>Workplace Professionalism</span><span>Google Workspace</span><span>Resume, ATS &amp; LinkedIn</span><span>Interviews &amp; Mock Interviews</span><span>Job Search &amp; Networking</span>
+      </div>
+      <div class="banner">
+        <div><b>Corporate workshops too</b><p>Any module can be delivered as a workshop for your team, including AR-specific sessions for collectors and managers.</p></div>
+        <a class="btn btn-primary" href="#contact" data-track="cta:enquire_courses">Enquire about training</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- CONSULTING -->
+  <section id="consulting" class="section alt">
+    <div class="wrap">
+      <div class="head-center">
+        <p class="eyebrow">CONSULTING FOR BUSINESSES</p>
+        <h2>Faster cash, healthier receivables, stronger teams</h2>
+      </div>
+      <div class="services">
+        <div class="svc"><b>AR Health Check</b><p>Review of ageing, disputes, process, tools and team, with quick wins and priorities.</p></div>
+        <div class="svc"><b>DSO &amp; Overdue Reduction</b><p>Prioritised portfolios, call playbooks, escalation rules and weekly tracking.</p></div>
+        <div class="svc"><b>Collections Process &amp; Policy</b><p>Credit policy, credit review, dispute workflow, escalation matrix and SOPs.</p></div>
+        <div class="svc"><b>AR Team Coaching</b><p>Customer conversations, prioritisation, metrics and leadership for collectors and managers.</p></div>
+        <div class="svc"><b>Order-to-Cash Transformation</b><p>Shared services set-up, transitions, automation readiness and cash application.</p></div>
+        <div class="svc"><b>Custom AI Assistant</b><p>Your own assistant trained on your policies and SOPs, with data protection built in.</p></div>
+      </div>
+      <div class="banner dark">
+        <div><b>Book a free 30-minute discovery call</b><p>Tell me about your receivables challenge. I'll suggest where to start, with no obligation.</p></div>
+        <a class="btn btn-primary" href="#contact" data-track="cta:book_call">Book a call</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- INSIGHTS (free content) -->
+  <section id="insights" class="section">
+    <div class="wrap">
+      <div class="head-center">
+        <p class="eyebrow">FREE INSIGHTS</p>
+        <h2>Practical playbook, free to read</h2>
+        <p class="lead">Short, useful ideas I use every day. Open any card.</p>
+      </div>
+      <div class="insights">
+        <details class="insight"><summary data-track="insight_open:diagnose"><span class="tag">Collections</span><b>Diagnose before you chase</b></summary>
+          <p>An overdue balance is a symptom. Check five things in order: is the <b>invoice</b> right (PO, price, tax, delivery proof)? What is the customer's <b>intent</b> (willing and able, willing but unable, able but unwilling)? Is anything pending <b>operationally</b> (GRN, approvals, portal upload)? Is there a <b>dispute</b>? Is the <b>payment</b> actually scheduled? If any one of these is zero, cash is zero.</p></details>
+        <details class="insight"><summary data-track="insight_open:ptp"><span class="tag">Collections</span><b>A promise-to-pay that holds</b></summary>
+          <p>A real promise has an <b>amount, a date and a named person</b>. Confirm it in writing the same day, set a reminder for the day before, and check receipt the day after. If it breaks, call the same day, ask what changed, and agree a smaller, realistic commitment with a clear escalation trigger.</p></details>
+        <details class="insight"><summary data-track="insight_open:escalation"><span class="tag">Collections</span><b>The escalation ladder</b></summary>
+          <p>Collector → AR lead → sales or account owner → finance heads on both sides → credit hold → formal notice → legal (last resort, with approval). Move up one step at a time, on agreed triggers, and always be firm on facts and respectful with people.</p></details>
+        <details class="insight"><summary data-track="insight_open:metrics"><span class="tag">AR metrics</span><b>Metrics that actually move cash</b></summary>
+          <p>DSO tells you the trend, but manage with <b>overdue %, ageing buckets, promise-kept rate, dispute cycle time and unapplied cash</b>. Prioritise accounts by value × age × risk, and review the top 20 every week.</p></details>
+        <details class="insight"><summary data-track="insight_open:resume"><span class="tag">Careers</span><b>5 resume fixes that beat the ATS</b></summary>
+          <p>Use standard headings (Summary, Experience, Education, Skills). Keep one column, no tables or text boxes. Start bullets with action verbs and add numbers (₹, %, days, volume). Mirror the job description's keywords where they are true for you. Save as a text-based PDF or DOCX.</p></details>
+        <details class="insight"><summary data-track="insight_open:interview"><span class="tag">Careers</span><b>Interview answers that stick</b></summary>
+          <p>Answer with <b>STAR</b>: Situation, Task, Action, Result. Keep it to 90 seconds and end with a number: “cut overdue by 18% in two quarters”. Prepare five stories that cover a challenge, a failure, teamwork, a conflict and a success.</p></details>
+      </div>
+    </div>
+  </section>
+</main>
+
+<!-- ================= QUIZ (always visible, runs in the browser, no AI cost) ================= -->
+<section id="quiz" class="section alt">
+  <div class="wrap">
+    <div class="head-center">
+      <p class="eyebrow">FREE AR QUIZ</p>
+      <h2>How sharp is your AR knowledge?</h2>
+      <p class="lead">Pick a topic. 5 random questions each round, so every round is different. No sign-in needed.</p>
+    </div>
+    <div id="quizTopics" class="topics"></div>
+    <div id="quizBox" class="card quiz hidden">
+      <div class="quiz-head"><b id="quizTitle"></b><span class="muted" id="quizProgress"></span></div>
+      <p id="quizQ" class="quizq"></p>
+      <div id="quizOpts" class="opts"></div>
+      <p id="quizExplain" class="explain hidden"></p>
+      <div class="quiz-head">
+        <span class="muted" id="quizScore"></span>
+        <button id="quizNext" class="btn btn-dark hidden">Next question</button>
+      </div>
+    </div>
+    <div id="quizEnd" class="card quiz hidden">
+      <h3 id="quizResult"></h3>
+      <p id="quizMsg" class="muted"></p>
+      <div class="row-gap">
+        <button id="quizAgain" class="btn btn-dark">Play again</button>
+        <button id="quizOther" class="btn btn-soft">Choose another topic</button>
+        <a href="#ai" class="btn btn-soft">Ask the AI assistant</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= PRICING (short) ================= -->
+<section id="pricing" class="section slim">
+  <div class="wrap">
+    <div class="price-strip">
+      <div>
+        <p class="eyebrow">SIMPLE, PAY AS YOU GO</p>
+        <h3>No subscription. Pay only for what you use.</h3>
+      </div>
+      <div class="price-points">
+        <div><b>Free</b><span>3 AR questions, quiz &amp; insights</span></div>
+        <div><b>₹19</b><span>to top up AI questions</span></div>
+        <div><b>₹99</b><span>resume ATS report</span></div>
+        <div><b>₹999</b><span>team plans from</span></div>
+      </div>
+      <a class="btn btn-dark" href="/pricing.html" data-track="cta:pricing_page">See all plans</a>
+    </div>
+    <p class="small muted center-text">Training and consulting are quoted to your needs. <a href="#contact">Ask for a proposal</a>.</p>
+  </div>
+</section>
+
+<!-- ================= FAQ ================= -->
+<section id="faq" class="section alt">
+  <div class="wrap narrow">
+    <div class="head-center"><p class="eyebrow">FAQ</p><h2>Questions, answered</h2></div>
+    <details class="faq"><summary>Who will I actually be working with?</summary><p>Me, Sudipta Ghosh. Training, resume curation and consulting are delivered personally. The AI assistant and ATS checker are built on my own methods so you can get help any time, instantly.</p></details>
+    <details class="faq"><summary>Is my data private?</summary><p>Yes. Resumes are read in your browser. Phone numbers, emails, PAN and account numbers are hidden before anything reaches the AI. Questions, answers and resumes are not stored. Visitor statistics are anonymous counts only: no cookies, no tracking across sites.</p></details>
+    <details class="faq"><summary>How is this different from ChatGPT?</summary><p>The assistant follows a structured collections method from 20+ years of AR leadership, with Indian business context, ready-to-send outputs and privacy masking. And when you need more than an answer, you can work with me directly.</p></details>
+    <details class="faq"><summary>Do you train corporate teams?</summary><p>Yes. Any training module can be delivered as a workshop, and I run AR-specific sessions for collectors, team leads and managers. Contact me for a proposal.</p></details>
+    <details class="faq"><summary>What does the ₹99 ATS report include?</summary><p>A score out of 100 across six areas, a job match score if you add a job description, missing keywords, strengths and 5–8 prioritised fixes with example rewrites.</p></details>
+    <details class="faq"><summary>Is the ATS score guaranteed?</summary><p>No tool can guarantee it: each employer configures its ATS differently. The report is an expert estimate based on widely used ATS rules, and the fixes are what recruiters consistently look for.</p></details>
+  </div>
+</section>
+
+<!-- ================= CONTACT ================= -->
+<section id="contact" class="contact">
+  <div class="wrap contact-grid">
+    <div>
+      <h2>Let's talk</h2>
+      <p>Training, consulting, resume help or a question about your receivables.</p>
+    </div>
+    <div class="contact-links">
+      <a class="btn btn-primary btn-lg" href="https://wa.me/919538924090" target="_blank" rel="noopener" data-track="cta:whatsapp">WhatsApp +91 95389 24090</a>
+      <a class="btn btn-outline btn-lg" href="mailto:hello@cashcollectpro.com" data-track="cta:email">hello@cashcollectpro.com</a>
+      <a class="btn btn-outline btn-lg" href="https://www.linkedin.com/in/sudipta-ghosh-3759b439/" target="_blank" rel="noopener" data-track="cta:linkedin">LinkedIn</a>
+    </div>
+  </div>
+</section>
+
+<footer class="foot">
+  <div class="wrap foot-row">
+    <span>© CashCollect Pro · Sudipta Ghosh</span>
+    <span><a href="/pricing.html">Pricing</a> · <a href="/contact.html">Contact</a> · <a href="/privacy.html">Privacy</a> · <a href="/terms.html">Terms</a> · <a href="/refund.html">Refunds</a></span>
+  </div>
+</footer>
+
+<!-- ATS nudge (shown once per visitor after a few seconds) -->
+<aside id="atsNudge" class="nudge hidden" role="dialog" aria-label="Resume ATS check">
+  <button class="x" id="nudgeClose" aria-label="Close">×</button>
+  <b>Want to check your resume's ATS score?</b>
+  <p>See your score out of 100 and the exact fixes in about 60 seconds. Just ₹99.</p>
+  <button class="btn btn-primary js-ats" data-track="cta:ats_nudge">Check my resume</button>
+</aside>
+</body>
+</html>
